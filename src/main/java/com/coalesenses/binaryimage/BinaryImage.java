@@ -57,7 +57,7 @@ public class BinaryImage {
     private ChipType chipType = ChipType.Unknown;
 
     private byte[] bytes = null;
-    
+
     public BinaryImage(File binfile) throws FileNotFoundException, IOException {
         // this(new FileInputStream(binfile), revisionNumber);
         this(new FileInputStream(binfile));
@@ -67,7 +67,15 @@ public class BinaryImage {
         // Read from the stream into a byte array
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
         FileUtils.copy(binfile, buffer);
-        bytes = buffer.toByteArray();
+        init(buffer.toByteArray());
+    }
+
+    public BinaryImage(byte[] otapProgram) {
+        init(otapProgram);
+    }
+
+    private void init(byte[] otapProgram) {
+        bytes = otapProgram;
 
         // Determine chip type of the file
         chipType = determineFileType(getBytes());
@@ -85,7 +93,7 @@ public class BinaryImage {
 
             // Check if the current chunk is full
             if (currentChunk.getPacketCount() >= MAX_CHUNK_SIZE) {
-                log.debug("Current chunk #{} full ({} packets), creating new one", currentChunk.getChunkNumber(),
+                log.trace("Current chunk #{} full ({} packets), creating new one", currentChunk.getChunkNumber(),
                         currentChunk.getPacketCount());
                 currentChunk = new OtapChunk((short) (currentChunk.getChunkNumber() + 1));
                 chunks.add(currentChunk);
@@ -95,12 +103,12 @@ public class BinaryImage {
             OtapPacket p = new OtapPacket(address, packet, 0, packetLen);
             currentChunk.addPacket(p);
 
-            log.debug("Added otap packet: " + p);
+            log.trace("Added otap packet: " + p);
 
             address += packetLen;
         }
 
-        log.info("Done, got " + chunks.size() + " chunks.");
+        log.info("Done loading file, got " + chunks.size() + " chunks.");
     }
 
     public OtapChunk getChunk(int number) {
@@ -149,7 +157,7 @@ public class BinaryImage {
             return ChipType.JN5121;
 
         } else if (hasRepeatedPattern(bytes, 0, 4, (byte) 0xE0)) {
-            log.debug("Start matches 4 x 0xE0 -> Could be JN513XR1 or JN513XR1");
+            log.trace("Start matches 4 x 0xE0 -> Could be JN513XR1 or JN513XR1");
 
             {// JN513XR1
              // OAD
@@ -160,9 +168,9 @@ public class BinaryImage {
                 ok = ok && hasRepeatedPattern(bytes, start, count, (byte) 0xF0);
 
                 if (ok) {
-                    log.debug("OAD Section found (8 x 0xFF, 4 x 0xF0)");
+                    log.trace("OAD Section found (8 x 0xFF, 4 x 0xF0)");
                 } else {
-                    log.debug("No OAD Section found -> not a JN513XR1");
+                    log.trace("No OAD Section found -> not a JN513XR1");
                 }
 
                 // MAC Adress
@@ -172,8 +180,8 @@ public class BinaryImage {
                     ok = ok && hasRepeatedPattern(bytes, start, count, (byte) 0xFF);
 
                     if (ok) {
-                        log.debug("MAC Section found (32 x 0xFF)");
-                        log.debug("Chip type is JN513XR1");
+                        log.trace("MAC Section found (32 x 0xFF)");
+                        log.debug("Chip type of binary file is JN513XR1");
                         return ChipType.JN513XR1;
                     }
                 }
@@ -185,7 +193,7 @@ public class BinaryImage {
                 boolean ok = hasRepeatedPattern(bytes, start, count, (byte) 0xFF);
 
                 if (ok) {
-                    log.debug("Chip type is JN513X");
+                    log.debug("Chip type of binary file is JN513X");
                     return ChipType.JN513X;
                 }
             }
