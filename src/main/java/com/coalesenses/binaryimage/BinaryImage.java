@@ -200,7 +200,13 @@ public class BinaryImage {
 
             // TODO Add missing chip types
         }
-        return ChipType.Unknown;
+        else if ((bytes[0] == 0x00) && (bytes[1]==0) && (bytes[2]==(byte)0xe0)  && (bytes[3]==(byte)0xe0))
+		{
+			log.debug("File type is JN5148");
+			return ChipType.JN5148;
+		}
+		log.error("Chip type of the given file is UNKNOWN");
+		return ChipType.Unknown;
     }
 
     private boolean hasRepeatedPattern(byte b[], int offset, int repeat, byte pattern) {
