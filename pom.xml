@@ -111,4 +111,8 @@
 
 	</distributionManagement>
 
+	<scm>
+		<connection>scm:git:https://pfisterer@github.com/pfisterer/isense-binary-image.git</connection>
+	</scm>
+
 </project>
