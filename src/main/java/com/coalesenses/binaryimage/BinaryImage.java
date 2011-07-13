@@ -33,11 +33,11 @@ import java.io.InputStream;
 import java.util.Set;
 import java.util.TreeSet;
 
+import de.uniluebeck.itm.wsn.drivers.core.ChipType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.uniluebeck.itm.tr.util.FileUtils;
-import de.uniluebeck.itm.wsn.devicedrivers.generic.ChipType;
 
 public class BinaryImage {
     private static final Logger log = LoggerFactory.getLogger(BinaryImage.class);
@@ -54,7 +54,7 @@ public class BinaryImage {
 
     private Set<OtapChunk> chunks = new TreeSet<OtapChunk>();
 
-    private ChipType chipType = ChipType.Unknown;
+    private ChipType chipType = ChipType.UNKNOWN;
 
     private byte[] bytes = null;
 
@@ -206,7 +206,7 @@ public class BinaryImage {
 			return ChipType.JN5148;
 		}
 		log.error("Chip type of the given file is UNKNOWN");
-		return ChipType.Unknown;
+		return ChipType.UNKNOWN;
     }
 
     private boolean hasRepeatedPattern(byte b[], int offset, int repeat, byte pattern) {
