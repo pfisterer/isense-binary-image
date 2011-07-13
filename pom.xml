@@ -3,7 +3,7 @@
 
 	<groupId>com.coalesenses</groupId>
 	<artifactId>isense-binary-image</artifactId>
-	<version>0.3-SNAPSHOT</version>
+	<version>0.3</version>
 	<packaging>jar</packaging>
 
 	<name>iSense Binary Image Helper</name>
