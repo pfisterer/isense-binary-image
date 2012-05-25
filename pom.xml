@@ -48,19 +48,16 @@
 	</build>
 
 	<dependencies>
-
 		<dependency>
 			<groupId>de.uniluebeck.itm</groupId>
 			<artifactId>wsn-device-drivers-core</artifactId>
-			<version>1.1-SNAPSHOT</version>
+			<version>1.1</version>
 		</dependency>
-
 		<dependency>
             <groupId>de.uniluebeck.itm.itmutils</groupId>
             <artifactId>itmutils</artifactId>
-            <version>0.4-SNAPSHOT</version>
+            <version>0.4</version>
         </dependency>
-
 	</dependencies>
 
 	<repositories>
@@ -74,7 +71,6 @@
 				<enabled>false</enabled>
 			</snapshots>
 		</repository>
-
 		<repository>
 			<id>itm-maven-repository-snapshots</id>
 			<url>http://www.itm.uni-luebeck.de/projects/maven/snapshots/</url>
